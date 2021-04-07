@@ -32,6 +32,26 @@ namespace BlazorApp.Api
             return summary;
         }
 
+        private static string GetTipOfTheDAy(int temp)
+        {
+            var summary = "Mild";
+
+            if (temp >= 32)
+            {
+                summary = "eglio fare un baagno al mare";
+            }
+            else if (temp <= 16 && temp > 0)
+            {
+                summary = "bella la primavera";
+            }
+            else if (temp <= 0)
+            {
+                summary = "esci dal frigo";
+            }
+
+            return summary;
+        }
+
         [FunctionName("WeatherForecast")]
         public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
@@ -44,7 +64,8 @@ namespace BlazorApp.Api
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = temp = randomNumber.Next(-20, 55),
-                Summary = GetSummary(temp)
+                Summary = GetSummary(temp),
+                TipOfTTheDay = GetTipOfTheDAy(temp)
             }).ToArray();
 
             return new OkObjectResult(result);
